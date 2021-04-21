@@ -4,11 +4,12 @@ require __DIR__ . "/vendor/autoload.php";
 
 class Auth
 {
+    // TODO: store secret key on config file or secure place like environment var
     public static $SECRET_KEY = "1234";
 
     public static function login($username, $password)
     {
-        // TODO: use passrod_verify
+        // TODO: use passrod_verify instead of logical operator
         if ($username === "admin" && $password === "admin") {
             $payload = [
                 "session_id" => uniqid(),
@@ -17,7 +18,7 @@ class Auth
             ];
 
             $jwt = \Firebase\JWT\JWT::encode($payload, Auth::$SECRET_KEY, 'HS256');
-            setcookie("JWT-SESSION", $jwt); // TODO: make http only cookie
+            setcookie("JWT-SESSION", $jwt); // TODO: make http only cookie to prevent XSS Attack
             return true;
         } else {
             return false;
